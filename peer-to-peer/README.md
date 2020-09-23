@@ -1,6 +1,6 @@
 # SHEMS
 Smart home energy management system of a peer-to-peer network considering modulating heat pumps and photovoltaic systems
-Explore the results interactively:   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/lilanger/SHEMS/master?filepath=peer-to-peer%2FSHEMS_visualization_Interactive_julia.ipynb)
+Explore the results interactively:   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/lilanger/PEERS/master?filepath=peer-to-peer%2FSHEMS_visualization_Interactive_julia.ipynb)
 
 <p align="center">
   <img src="pics\PEERS_graph.png" width="400"/>
