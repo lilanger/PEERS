@@ -5,3 +5,6 @@ Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Interact = "c601a237-2ae4-5e1e-952c-7a85b0c7eef1"
 StatsPlots = "f3b207a7-027a-5e70-b257-86293d7955fd"
 WebIO = "0f1e0344-ec1d-5b48-a673-e5cf874b6c29"
+
+[compat]
+julia = "1.4.2"
