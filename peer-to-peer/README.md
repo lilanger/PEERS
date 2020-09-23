@@ -3,7 +3,7 @@ Smart home energy management system of a peer-to-peer network considering modula
 Explore the results interactively:   [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/lilanger/SHEMS/master?filepath=peer-to-peer%2FSHEMS_visualization_Interactive_julia.ipynb)
 
 <p align="center">
-  <img src="pics\PEERS_graph.png" width="600"/>
+  <img src="pics\PEERS_graph.png" width="400"/>
 </p>
 
 ## Optimization model written in Julia JuMP
