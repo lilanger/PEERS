@@ -18,7 +18,21 @@ Explore the results interactively:   [![Binder](https://mybinder.org/badge_logo.
   - number  of peers
   - tariff case
   
-  using function roll_SHEMS(market_flag, n_peers, n_market, h_start, h_end, h_predict, h_control, case)
+  using function roll_SHEMS(market_flag, n_peers, n_market, h_start, h_end, h_predict, h_control, case)   
+  * market_flag -> 0 = no P2P market, 1 = with P2P market  
+  * n_peers -> 1 up to 5 peers (1=prosumager, 2=prosumer, more=consumer)  
+  * n_market -> multiplier for market participants (e.g., for n_peers=3, n_market=1 gives 3, n_market=10 30 participants (10 each))  
+  * h_start -> start of modeling horizon, standard = 1 (January 1 at 1 am)  
+  * h_end -> end of modeling horizon, standard = 8760 (December 31 at 12 am)  
+  * h_predict -> length of prediction horizon (full information)  
+  * h_control -> length of control horizon (decision horizon)  
+  * case ->   
+    * case #1: current regime with FiT,   
+    * case #2: current regime without FiT,   
+    * case #3: proposed regime (w FiT),   
+    * case #4: proposed regime (w/o FiT),   
+    * case #5: area regime (w FiT),   
+    * case #6: area regime (w/o FiT)  
 
 ## Examples:
 Run model with 
