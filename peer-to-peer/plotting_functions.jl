@@ -2,9 +2,9 @@
 
 # load all input and result data into a dataframe-----------------------------------------------------------
 function load_data(date, h_predict, h_control, h_start, h_end, market_flag, n_peers, n_market, case)
-    Input_df = CSV.read("data/200124_datafile_all_details_right_timestamp.csv");
+    Input_df = CSV.read("data/200124_datafile_all_details_right_timestamp.csv", DataFrame);
     Flow_df = CSV.read("results/$(date)_results_$(h_predict)_$(h_control)_$(h_start)-$(h_end)"*
-                    "_$(market_flag)_$(n_peers)_$(n_market)_$(case).csv");
+                    "_$(market_flag)_$(n_peers)_$(n_market)_$(case).csv", DataFrame);
     # merge on data stamp
     Data_df = leftjoin(Flow_df, Input_df, on=[:month, :day, :hour], makeunique=false,
                         indicator=nothing, validate=(false, false));
@@ -40,7 +40,7 @@ function bar_PV(Data_df, date, peer, yaxis, title)
         [:SOC_B], color =[:purple], xticks=0:6:24,
         label=["SOC_b"], linewidth= 2.0);
     
-    yaxis!("$(yaxis)", font(10, "sans-sarif"), tickfontsize=10)
+    yaxis!("$(yaxis)", font(10, "serif"), tickfontsize=10)
     annotate!(3, 8.5, text("$(Dates.month(date))/$(Dates.day(date))", 10))
 end
 
@@ -58,7 +58,8 @@ function bar_demand(Data_df, date, peer, yaxis, title)
         [:electkwh], color =[:orange],
         label=["d_e"], linewidth= 2.0);
     
-    yaxis!("$(yaxis)", font(10, "sans-sarif"), tickfontsize=10)
+    yaxis!("$(yaxis)", font(10, "serif"), tickfontsize=10)
+    #annotate!(3, 1.8, text("$(Dates.month(date))/$(Dates.day(date))", 10))
 end
 
 # chart for heat/ hot water demand fulfillment-----------------------------------------------------------
@@ -78,7 +79,7 @@ function bar_heat(Data_df, date, peer, yaxis, title)
         label=["PM_DE" "B_DE" "GR_DE" "PV_DE"], bar_position = :stack, alpha=0.8);
 
     plot!(0:23, ones(24,1)*3, linestyle=:dot, linewidth= 2, color=:grey)
-    yaxis!("$(yaxis)", font(10, "sans-sarif"))
+    yaxis!("$(yaxis)", font(10, "serif"))
 end
 
 # chart for comfort ranges for heat/ hot water----------------------------------------------------------
@@ -91,49 +92,52 @@ function bar_comfort(Data_df, date, peer, yaxis, title)
 
     # state-of-charge fh
     @df Data_df[(Data_df[:,:day].==Dates.day(date)) .&(Data_df[:,:month].==Dates.month(date)) .&(Data_df[:,:Peer].==peer),:] plot!(
-        [:Temp_FH], ylim=(19,23), yticks=20:1:22, xticks=0:6:24, tickfontsize=10, color =[:firebrick], 
+        [:Temp_FH],  color =[:firebrick], 
         label=["T_fh"], legend=false, linewidth= 2.0);
 
     plot!(0:23, ones(24,1)*20, linestyle=:dot, linewidth= 2, color=:firebrick)
     plot!(0:23, ones(24,1)*22, linestyle=:dot, linewidth= 2, color=:firebrick)
-    yaxis!("$(yaxis)", font(10, "sans-sarif"))
+    yaxis!("$(yaxis)", font(10, "serif"))
+    xaxis!("time")
 
     plt = twinx()
     # state-of-charge hw
     @df Data_df[(Data_df[:,:day].==Dates.day(date)) .&(Data_df[:,:month].==Dates.month(date)) .&(Data_df[:,:Peer].==peer),:] plot!(
-        plt, [:Vol_HW], ylim=(10,190), yticks=20:40:180, xticks=0:6:24, tickfontsize=10, color =[:steelblue],
+        plt, [:Vol_HW], ylim=(10,190), yticks=20:40:180, xticks=[], tickfontsize=10, color =[:steelblue],
         label=["V_fh"], legend=false, linewidth= 2.0, linestyle=:dash, grid=false);
 
     plot!(plt, 0:23, ones(24,1)*20, linestyle=:dot, linewidth= 2, color=:steelblue)
     plot!(plt, 0:23, ones(24,1)*180, linestyle=:dot, linewidth= 2, color=:steelblue)
-    xaxis!("time")
+
 end
 
 function plot_legend(plotfunction)
     if plotfunction == bar_PV
-        scatter((1:5)', xlim=(4,5), color =[:green :firebrick :grey :purple :orange], legend=(.45,.9),
-            label=["→pm" "→hp" "→gr" "→b" "→d_e"], framestyle= :none, marker= (:rect, stroke(0)), legendfontsize=10)   
-        plot!((1:3)', xlim=(4,5), linestyle=[:solid :solid :dot], color=[:gold :purple :purple], 
-            label=["ge" "SOC_b" "b_max"])
+        scatter((1:5)', xlim=(4,8), color =[:green :firebrick :grey :purple :orange], legend=(-.5,.9),
+            label=["  →pm" "  →hp" "  →gr" "  →b" "  →d_e"], framestyle= :none, marker= (:rect, stroke(0)),
+            legendfontsize=10)   
+        plot!((1:3)', xlim=(4,8), linestyle=[:solid :solid :dot], color=[:gold :purple :purple], 
+            label=["  ge" "  SOC_b" "  b_max"])
     
         elseif plotfunction == bar_demand
-        scatter((1:4)', xlim=(4,5), color =[:green :grey :purple :gold], legend=(.45,.5),
-            label=["pm→d_e" "gr→d_e" "b→d_e" "pv→d_e"], framestyle= :none, marker= (:rect, stroke(0)), 
+        scatter((1:4)', xlim=(4,8), color =[:green :grey :purple :gold], legend=(-.5,.5),
+            label=["  pm→d_e" "  gr→d_e" "  b→d_e" "  pv→d_e"], framestyle= :none, marker= (:rect, stroke(0)), 
             legendfontsize=10)   
-        plot!((1:1)', xlim=(4,5), linestyle=[:solid], color=:orange, label="de")  
+        plot!((1:1)', xlim=(4,8), linestyle=[:solid], color=:orange, label="  de")  
     
         elseif plotfunction == bar_heat
-        scatter((1:6)', xlim=(4,5), color =[:green :grey :purple :gold :firebrick :steelblue], legend=(.45,.8),
-            label=["pm→hp" "gr→hp" "b→hp" "pv→hp" "d_fh" "d_hw"], framestyle= :none, marker= (:rect, stroke(0)),
+        scatter((1:6)', xlim=(4,8), color =[:green :grey :purple :gold :firebrick :steelblue], legend=(-.5,.76),
+            label=["  pm→hp" "  gr→hp" "  b→hp" "  pv→hp" "  d_fh" "  d_hw"], framestyle= :none, marker= (:rect,
+                stroke(0)),
             legendfontsize=10, alpha=[1 1 1 1 .2 .2])   
-        plot!((1:1)', xlim=(4,5), linestyle=[:dot], color=:grey, label="hp_max")   
+        plot!((1:1)', xlim=(4,8), linestyle=[:dot], color=:grey, label="  hp_max")   
     
         elseif plotfunction == bar_comfort
-        scatter((1:2)', xlim=(4,5), color =[:firebrick :steelblue], legend=(.45,.7),
-            label=["mod_fh" "mod_hw"], framestyle= :none, marker= (:rect, stroke(0)),
+        scatter((1:2)', xlim=(4,8), color =[:firebrick :steelblue], legend=(-.3,.64),
+            label=["  mod_fh" "  mod_hw"], framestyle= :none, marker= (:rect, stroke(0)),
             legendfontsize=10, alpha=[.2 .2])   
-        plot!((1:4)', xlim=(4,5), linestyle=[:dot :dot :solid :dash], 
-            color=[:firebrick :steelblue :firebrick :steelblue], label=["range_fh" "range_hw" "T_fh" "V_hw"])      
+        plot!((1:4)', xlim=(4,8), linestyle=[:dot :dot :solid :dash], 
+            color=[:firebrick :steelblue :firebrick :steelblue], label=["  range_fh" "  range_hw" "  T_fh" "  V_hw"])      
     end
 end    
 
@@ -142,7 +146,7 @@ end
 function bar_row(plotfunction, Data_df, date, peer, yaxis, title, length)
     plot(plotfunction(Data_df, date, peer, yaxis, title), [plotfunction(Data_df, (date+Day(i-1)), peer, "", "")
             for i in 2:length]..., plot_legend(plotfunction),layout=grid(1,length+1, 
-            widths=vcat([((length-.55)/length/length) for i in 1:length], [.55*length/length/length])), 
+            widths=vcat([((length-.28)/length/length) for i in 1:length], [.28*length/length/length])), 
             size=(300*(length+1),200), foreground_color_legend = :transparent, background_color_legend= :transparent); 
 end
 
