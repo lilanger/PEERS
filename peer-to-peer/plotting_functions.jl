@@ -2,9 +2,9 @@
 
 # load all input and result data into a dataframe-----------------------------------------------------------
 function load_data(date, h_predict, h_control, h_start, h_end, market_flag, n_peers, n_market, case)
-    Input_df = CSV.read("data/200124_datafile_all_details_right_timestamp.csv", DataFrame);
+    Input_df = CSV.read("data/200124_datafile_all_details_right_timestamp.csv");
     Flow_df = CSV.read("results/$(date)_results_$(h_predict)_$(h_control)_$(h_start)-$(h_end)"*
-                    "_$(market_flag)_$(n_peers)_$(n_market)_$(case).csv", DataFrame);
+                    "_$(market_flag)_$(n_peers)_$(n_market)_$(case).csv");
     # merge on data stamp
     Data_df = leftjoin(Flow_df, Input_df, on=[:month, :day, :hour], makeunique=false,
                         indicator=nothing, validate=(false, false));
