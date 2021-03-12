@@ -7,4 +7,4 @@ P2P market of smart home energy management systems considering modulating heat p
 
 **Find further details in the associated publication:**
 
-Langer, Lissy. "An Optimal Peer-to-Peer Market Considering Modulating Heat Pumps and Photovoltaic Systems under the German Levy Regime." Energies 2020, 13(20): 5348. https://doi.org/10.3390/en13205348
+Langer, Lissy. "An Optimal Peer-to-Peer Market Considering Modulating Heat Pumps and Photovoltaic Systems under the German Levy Regime." Energies 13.20 (2020): 5348. https://doi.org/10.3390/en13205348
